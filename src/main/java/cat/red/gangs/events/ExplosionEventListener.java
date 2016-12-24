@@ -21,8 +21,8 @@ public class ExplosionEventListener
 		
 		if (territory.isClaimed())
 		{
-			Boolean shouldExplode = config.getBool("claimed.protection.explosion.explode");
-			Boolean shouldCauseFire = config.getBool("claimed.protection.explosion.fire");
+			Boolean shouldExplode = config.getBool("territory.explosion.explode");
+			Boolean shouldCauseFire = config.getBool("territory.explosion.fire");
 			
 			Explosion explosion = Sponge.getRegistry().createBuilder(Explosion.Builder.class)
 					.from(event.getExplosion())

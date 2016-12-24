@@ -28,4 +28,9 @@ public class Territory {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	public void claim(Gang playerGang) {
+		// TODO Auto-generated method stub
+		
+	}
 }

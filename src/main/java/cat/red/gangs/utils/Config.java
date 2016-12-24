@@ -1,5 +1,7 @@
 package cat.red.gangs.utils;
 
+import org.spongepowered.api.block.BlockType;
+
 import cat.red.gangs.Gangs;
 
 public class Config {
@@ -13,7 +15,12 @@ public class Config {
 		return false;
 	}
 
-	public Object getTraduction(String string) {
+	public String getTranslation(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public BlockType getBlock(String string){
 		// TODO Auto-generated method stub
 		return null;
 	}
