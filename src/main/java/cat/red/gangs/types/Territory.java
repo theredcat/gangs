@@ -1,12 +1,43 @@
 package cat.red.gangs.types;
 
-public class Territory {
-	
-	private boolean isClaimed;
+import cat.red.gangs.Gangs;
+import cat.red.gangs.utils.database.DatabaseEntry;
 
-	public Territory()
-	{
-		
+public class Territory extends DatabaseEntry{
+	
+	public Territory(String id) {
+		super(id);
+	}
+
+	private boolean isClaimed = false;
+	private int x;
+	private int y;
+	private Gang ownerGang;
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + x;
+		result = prime * result + y;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Territory other = (Territory) obj;
+		if (x != other.x)
+			return false;
+		if (y != other.y)
+			return false;
+		return true;
 	}
 	
 	public boolean isClaimed()
@@ -15,22 +46,18 @@ public class Territory {
 	}
 
 	public Gang getGang() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.ownerGang;
 	}
 
 	public boolean gangCanBuild(Gang gang) {
-		// TODO Auto-generated method stub
-		return false;
+		return gang == ownerGang;
 	}
 
 	public boolean gangCanInterract(Gang gang) {
-		// TODO Auto-generated method stub
-		return false;
+		return gang == ownerGang;
 	}
 
 	public void claim(Gang playerGang) {
-		// TODO Auto-generated method stub
-		
+		Gangs.getDatabase().createTerritory(this.x, this.y);
 	}
 }

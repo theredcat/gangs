@@ -10,7 +10,7 @@ import org.spongepowered.api.world.World;
 import cat.red.gangs.Gangs;
 import cat.red.gangs.types.Gang;
 import cat.red.gangs.types.Territory;
-import cat.red.gangs.utils.Database;
+import cat.red.gangs.utils.database.Database;
 
 import java.util.Optional;
 

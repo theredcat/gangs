@@ -1,0 +1,17 @@
+{
+  "_parent": {
+    "type": "gang"
+  },
+  "properties": {
+    "name": {
+      "type": "keyword"
+    },
+    "coordinate": {
+      "type": "object",
+      "properties": {
+        "x":  { "type": "integer" },
+        "y":  { "type": "integer" }
+      }
+    }
+  }
+}

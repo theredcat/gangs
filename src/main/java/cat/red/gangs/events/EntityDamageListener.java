@@ -7,7 +7,7 @@ import org.spongepowered.api.event.entity.DamageEntityEvent;
 
 import cat.red.gangs.Gangs;
 import cat.red.gangs.utils.Config;
-import cat.red.gangs.utils.Database;
+import cat.red.gangs.utils.database.Database;
 import cat.red.gangs.types.Gang;
 
 public class EntityDamageListener
@@ -24,9 +24,15 @@ public class EntityDamageListener
 		Entity target = event.getTargetEntity();
 		Gang targetGang = data.getGang(target.getUniqueId());
 
-		if(config.getBool("gang.friendlyFire") == true && sourceGang == targetGang) {
+		try {
+			if(config.getBool("gang.friendlyFire") == true && sourceGang == targetGang) {
+				event.setBaseDamage(0);
+				event.setCancelled(true);
+			}
+		} catch (Exception e) {
 			event.setBaseDamage(0);
 			event.setCancelled(true);
+			e.printStackTrace();
 		}
 	}
 }

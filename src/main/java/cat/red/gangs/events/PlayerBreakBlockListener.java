@@ -11,7 +11,7 @@ import org.spongepowered.api.world.explosion.Explosion;
 import cat.red.gangs.Gangs;
 import cat.red.gangs.types.Gang;
 import cat.red.gangs.types.Territory;
-import cat.red.gangs.utils.Database;
+import cat.red.gangs.utils.database.Database;
 
 public class PlayerBreakBlockListener
 {

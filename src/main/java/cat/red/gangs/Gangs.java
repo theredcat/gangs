@@ -1,9 +1,14 @@
 package cat.red.gangs;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -12,8 +17,7 @@ import org.spongepowered.api.service.economy.EconomyService;
 import com.google.inject.Inject;
 
 import cat.red.gangs.utils.Config;
-import cat.red.gangs.utils.Database;
-
+import cat.red.gangs.utils.database.Database;
 import cat.red.gangs.events.EntityDamageListener;
 import cat.red.gangs.events.ExplosionEventListener;
 import cat.red.gangs.events.PlayerBreakBlockListener;
@@ -29,6 +33,9 @@ public class Gangs
 	{
 		;
 	}
+	
+	@ConfigDir(sharedRoot = false)
+	private Path configDir;
 	
 	@Inject
 	private Logger logger;
@@ -63,16 +70,15 @@ public class Gangs
 		getLogger().debug("Searching for economy service...");
 		Optional<EconomyService> econService = Sponge.getServiceManager().provide(EconomyService.class);
 
-		if (econService.isPresent())
-		{
-			getLogger().debug("Economy service found, loading it");
-			econ = econService.get();
-
-			getLogger().debug("Loading config");
-			config = new Config();
+		getLogger().debug("Loading config");
+		try {
+			config = new Config(configDir, PluginInfo.ID);
+			config.createProperty("database.host", "localhost");
+			config.createProperty("database.port", 9200);
+			config.createProperty("database.name", "gangs");
 			
 			getLogger().debug("Loading data storage service");
-			data = new Database();
+			data = new Database(config.getString("database.host"), config.getInt("database.port"), config.getString("database.name"));
 			
 			getLogger().debug("Registering events");
 			Sponge.getEventManager().registerListeners(this, new PlayerInteractBlockListener());
@@ -83,10 +89,12 @@ public class Gangs
 			Sponge.getEventManager().registerListeners(this, new EntityDamageListener());
 
 			getLogger().info("Gangs has been loaded");
-		}
-		else
-		{
-			getLogger().error("No economy plugin was found! Gangs won't be loaded");
+		} catch (IOException e) {
+			getLogger().error("Failed to load config");
+			e.printStackTrace();
+		} catch (Exception e) {
+			getLogger().error("Configuration error");
+			e.printStackTrace();
 		}
 	}
 }

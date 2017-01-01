@@ -1,0 +1,10 @@
+{
+  "_parent": {
+    "type": "gang"
+  },
+  "properties": {
+    "name": {
+      "type": "keyword"
+    }
+  }
+}
