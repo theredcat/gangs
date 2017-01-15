@@ -15,6 +15,7 @@ repositories {
 dependencies {
     compile "org.spongepowered:spongeapi:6.0.0-SNAPSHOT"
     compile "org.elasticsearch.client:rest:5.1.1"
+    compile "com.jayway.jsonpath:json-path:2.2.0"
 }
 
 task fatJar(type: Jar) {

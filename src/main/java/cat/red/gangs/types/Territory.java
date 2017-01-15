@@ -1,17 +1,21 @@
 package cat.red.gangs.types;
 
-import cat.red.gangs.Gangs;
+import com.flowpowered.math.vector.Vector3i;
+
 import cat.red.gangs.utils.database.DatabaseEntry;
+import cat.red.gangs.utils.database.DatabaseField;
 
 public class Territory extends DatabaseEntry{
-	
-	public Territory(String id) {
-		super(id);
+
+	public Territory(Vector3i chunkPosition) throws Exception {
+		super(chunkPosition.getX()+"_"+chunkPosition.getY());
 	}
 
-	private boolean isClaimed = false;
+	@DatabaseField
 	private int x;
+	@DatabaseField
 	private int y;
+	@DatabaseField
 	private Gang ownerGang;
 	
 
@@ -40,24 +44,24 @@ public class Territory extends DatabaseEntry{
 		return true;
 	}
 	
-	public boolean isClaimed()
+	public Gang getGang() throws Exception{
+		return (Gang) this.get("ownerGang");
+	}
+	
+	public boolean isClaimed() throws Exception
 	{
-		return this.isClaimed;
+		return this.getGang() == null;
 	}
 
-	public Gang getGang() {
-		return this.ownerGang;
+	public boolean gangCanBuild(Gang gang) throws Exception {
+		return gang == this.getGang();
 	}
 
-	public boolean gangCanBuild(Gang gang) {
-		return gang == ownerGang;
-	}
-
-	public boolean gangCanInterract(Gang gang) {
-		return gang == ownerGang;
+	public boolean gangCanInterract(Gang gang) throws Exception {
+		return gang == this.getGang();
 	}
 
 	public void claim(Gang playerGang) {
-		Gangs.getDatabase().createTerritory(this.x, this.y);
+		//TODO
 	}
 }

@@ -8,35 +8,40 @@ import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.world.explosion.Explosion;
 
-import cat.red.gangs.Gangs;
+import cat.red.gangs.types.Entity;
 import cat.red.gangs.types.Gang;
 import cat.red.gangs.types.Territory;
-import cat.red.gangs.utils.database.Database;
 
 public class PlayerBreakBlockListener
 {
 	@Listener
 	public void onPlayerBreakBlock(ChangeBlockEvent.Break event, @Root Player player)
 	{
-		Database data = Gangs.getDatabase();
-		
-		for (Transaction<BlockSnapshot> transaction : event.getTransactions())
-		{
-			Territory territory = data.getTerritory(transaction.getFinal().getLocation().get());
-
-			if (territory.isClaimed())
+		try {
+			for (Transaction<BlockSnapshot> transaction : event.getTransactions())
 			{
-				Gang playerGang = data.getGang(player.getUniqueId());
-
-				if (!event.getCause().first(Explosion.class).isPresent())
+				Territory territory = new Territory(transaction.getFinal().getLocation().get().getChunkPosition());
+	
+				if (territory.isClaimed())
 				{
-					if (territory.gangCanBuild(playerGang))
+					if (!event.getCause().first(Explosion.class).isPresent())
 					{
-						event.setCancelled(true);
-						return;
+						Entity entity =  new Entity(player.getUniqueId());
+						Gang playerGang = entity.getGang();
+						
+						if (territory.gangCanBuild(playerGang))
+						{
+							event.setCancelled(true);
+							return;
+						}
 					}
 				}
 			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			event.setCancelled(true);
 		}
 	}
 }

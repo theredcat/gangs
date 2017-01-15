@@ -7,10 +7,9 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import cat.red.gangs.Gangs;
+import cat.red.gangs.types.Entity;
 import cat.red.gangs.types.Gang;
 import cat.red.gangs.types.Territory;
-import cat.red.gangs.utils.database.Database;
 
 import java.util.Optional;
 
@@ -19,31 +18,31 @@ public class PlayerInteractBlockListener
 	@Listener
 	public void onPlayerInteractBlock(InteractBlockEvent event, @Root Player player)
 	{
-		Optional<Location<World>> possibleLocation = event.getTargetBlock().getLocation();
-
-		if (possibleLocation.isPresent())
+		try
 		{
-			Database data = Gangs.getDatabase(); 
-			Territory territory = data.getTerritory(possibleLocation.get());
-			
-			try
+			Optional<Location<World>> possibleLocation = event.getTargetBlock().getLocation();
+	
+			if (possibleLocation.isPresent())
 			{
+				Territory territory = new Territory(possibleLocation.get().getChunkPosition());
+	
 				if (territory.isClaimed())
 				{
-					Gang playerGang = data.getGang(player.getUniqueId());
+					Entity entity = new Entity(player.getUniqueId());
+					Gang entityGang = entity.getGang();
 
-					if (territory.gangCanInterract(playerGang))
+					if (territory.gangCanInterract(entityGang))
 					{
 						event.setCancelled(true);
 						return;
 					}
 				}
 			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
 		}
-
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			event.setCancelled(true);
+		}
 	}
 }

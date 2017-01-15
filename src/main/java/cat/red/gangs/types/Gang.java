@@ -1,13 +1,15 @@
 package cat.red.gangs.types;
 
 import cat.red.gangs.utils.database.DatabaseEntry;
+import cat.red.gangs.utils.database.DatabaseField;
 
 public class Gang extends DatabaseEntry{
 	
-	public Gang(String id) {
+	public Gang(String id) throws Exception {
 		super(id);
 	}
 
+	@DatabaseField
 	private String name;
 	
 
